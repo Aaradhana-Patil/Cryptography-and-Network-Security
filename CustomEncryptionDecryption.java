@@ -2,8 +2,7 @@ package cns;
 
 import java.util.Scanner;
 
-
-public class CustomEncryptionDecryption {
+public class CustomEncryption {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -31,10 +30,15 @@ public class CustomEncryptionDecryption {
         StringBuilder encrypted = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            if (i % 2 == 0) { // Odd position (0-based indexing)
-                encrypted.append((char) (c + key));
-            } else { // Even position
-                encrypted.append((char) (c + (key - 1)));
+            if (Character.isLetter(c)) { // Check if the character is a letter
+                char base = Character.isLowerCase(c) ? 'a' : 'A'; // Determine case
+                if (i % 2 == 0) { // Odd position (0-based indexing)
+                    encrypted.append((char) ((c - base + key) % 26 + base));
+                } else { // Even position
+                    encrypted.append((char) ((c - base + (key - 1)) % 26 + base));
+                }
+            } else {
+                encrypted.append(c); // Non-alphabet characters remain unchanged
             }
         }
         return encrypted.toString();
@@ -45,13 +49,17 @@ public class CustomEncryptionDecryption {
         StringBuilder decrypted = new StringBuilder();
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            if (i % 2 == 0) { // Odd position (0-based indexing)
-                decrypted.append((char) (c - key));
-            } else { // Even position
-                decrypted.append((char) (c - (key - 1)));
+            if (Character.isLetter(c)) { // Check if the character is a letter
+                char base = Character.isLowerCase(c) ? 'a' : 'A'; // Determine case
+                if (i % 2 == 0) { // Odd position (0-based indexing)
+                    decrypted.append((char) ((c - base - key + 26) % 26 + base));
+                } else { // Even position
+                    decrypted.append((char) ((c - base - (key - 1) + 26) % 26 + base));
+                }
+            } else {
+                decrypted.append(c); // Non-alphabet characters remain unchanged
             }
         }
         return decrypted.toString();
     }
 }
-
